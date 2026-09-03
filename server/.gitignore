@@ -1,0 +1,23 @@
+# Environment variables — NEVER commit these
+.env
+
+# Dependencies
+node_modules
+
+# SQLite database files
+prisma/*.db
+prisma/*.db-journal
+prisma/*.db-wal
+prisma/*.db-shm
+
+# Prisma generated client (auto-generated on install)
+node_modules/.prisma
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db

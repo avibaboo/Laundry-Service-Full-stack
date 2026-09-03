@@ -1,0 +1,47 @@
+# ── Old / scratch files at project root ───────────────────────────────
+app.js
+index.html
+style.css
+images.js
+
+# ── AI IDE tool configs (personal, not project code) ──────────────────
+**/.agents
+**/.claude
+**/.cursor
+**/.devin
+**/.gemini
+
+# ── Dependencies ─────────────────────────────────────────────────────
+node_modules
+
+# ── Environment & Secrets ─────────────────────────────────────────────
+.env
+*.env.local
+
+# ── Database ──────────────────────────────────────────────────────────
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# ── Build outputs ─────────────────────────────────────────────────────
+dist
+dist-ssr
+build
+
+# ── Logs ──────────────────────────────────────────────────────────────
+logs
+*.log
+npm-debug.log*
+
+# ── OS / Editor ───────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

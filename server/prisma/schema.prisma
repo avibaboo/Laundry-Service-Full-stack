@@ -1,0 +1,92 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               String         @id @default(uuid())
+  fullName         String
+  email            String         @unique
+  passwordHash     String
+  phone            String         @unique
+  role             String         @default("CUSTOMER") // CUSTOMER, ADMIN, DRIVER
+  address          String?
+  latitude         Float?
+  longitude        Float?
+  isOnline         Boolean        @default(false)
+  totalSpent       Float          @default(0.0)
+  isBlocked        Boolean        @default(false)
+  resetPasswordToken String?
+  resetPasswordExpires DateTime?
+  createdAt        DateTime       @default(now())
+  
+  orders           Order[]        @relation("CustomerOrders")
+  deliveries       Order[]        @relation("DriverDeliveries")
+  notifications    Notification[]
+}
+
+model Service {
+  id               String         @id @default(uuid())
+  name             String
+  description      String
+  unitType         String         // KG, PIECE
+  pricePerUnit     Float
+  estimatedMinutes Int
+  imageUrl         String?
+  isActive         Boolean        @default(true)
+  
+  orderItems       OrderItem[]
+}
+
+model Order {
+  id                  String         @id @default(uuid())
+  customerId          String
+  assignedDriverId    String?
+  pickupAddress       String
+  deliveryAddress     String
+  status              String         @default("PENDING") // PENDING, CONFIRMED, etc.
+  totalQuantity       Float
+  subtotal            Float
+  discountAmount      Float          @default(0)
+  finalAmount         Float
+  paymentMethod       String         // CASH, CARD, WALLET
+  paymentStatus       String         @default("PENDING") // PENDING, PAID, FAILED
+  scheduledPickupTime DateTime
+  actualPickupTime    DateTime?
+  actualDeliveryTime  DateTime?
+  createdAt           DateTime       @default(now())
+
+  customer            User           @relation("CustomerOrders", fields: [customerId], references: [id])
+  driver              User?          @relation("DriverDeliveries", fields: [assignedDriverId], references: [id])
+  items               OrderItem[]
+  notifications       Notification[]
+}
+
+model OrderItem {
+  id               String   @id @default(uuid())
+  orderId          String
+  serviceId        String
+  quantity         Float
+  unitPriceAtTime  Float
+  totalPrice       Float
+
+  order            Order    @relation(fields: [orderId], references: [id])
+  service          Service  @relation(fields: [serviceId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  orderId   String?
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  order     Order?   @relation(fields: [orderId], references: [id])
+}
